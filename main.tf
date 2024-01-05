@@ -2,10 +2,10 @@ resource "aws_s3_bucket" "bucket" {
   bucket = var.name
 }
 
-resource "aws_s3_bucket_acl" "bucket" {
-  bucket = aws_s3_bucket.bucket.bucket
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "bucket" {
+#   bucket = aws_s3_bucket.bucket.bucket
+#   acl    = "private"
+# }
 
 resource "aws_s3_bucket_public_access_block" "bucket" {
   bucket              = aws_s3_bucket.bucket.id
