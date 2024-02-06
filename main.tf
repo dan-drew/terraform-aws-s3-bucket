@@ -2,11 +2,6 @@ resource "aws_s3_bucket" "bucket" {
   bucket = var.name
 }
 
-# resource "aws_s3_bucket_acl" "bucket" {
-#   bucket = aws_s3_bucket.bucket.bucket
-#   acl    = "private"
-# }
-
 resource "aws_s3_bucket_public_access_block" "bucket" {
   bucket              = aws_s3_bucket.bucket.id
   block_public_acls   = true
@@ -32,5 +27,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "bucket" {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
     }
+  }
+}
+
+resource "aws_s3_bucket_cors_configuration" "bucket" {
+  count = var.cors.enabled ? 1 : 0
+  bucket = aws_s3_bucket.bucket.bucket
+  cors_rule {
+    allowed_methods = coalesce(var.cors.methods, ["GET"])
+    allowed_origins = coalesce(var.cors.origins, ["*"])
+    allowed_headers = coalesce(var.cors.headers, ["Authorization"])
+    max_age_seconds = 3000
   }
 }
